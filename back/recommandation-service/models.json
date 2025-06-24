@@ -1,0 +1,10 @@
+{
+    "Recommandation": {
+      "user_id": "string",
+      "location_id": "string",
+      "culture_id": "string",
+      "date": "date",
+      "message": "string"
+    }
+  }
+  

@@ -1,0 +1,21 @@
+{
+    "Forecast": {
+      "id": "string",
+      "location_id": "string",
+      "date": "date",
+      "rain": "mm",
+      "temperature": "float",
+      "humidity": "percentage",
+      "wind_speed": "float",
+      "created_at": "datetime"
+    },
+    "Alert": {
+      "id": "string",
+      "location_id": "string",
+      "type": "string", 
+      "description": "string",
+      "start_time": "datetime",
+      "end_time": "datetime"
+    }
+  }
+  

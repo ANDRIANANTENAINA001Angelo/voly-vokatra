@@ -1,0 +1,16 @@
+{
+    "Culture": {
+      "id": "string",
+      "name": "string"
+    },
+    "CultureCalendar": {
+      "id": "string",
+      "culture_id": "string",
+      "region_id": "string",
+      "plant_start": "date",
+      "plant_end": "date",
+      "harvest_start": "date",
+      "harvest_end": "date"
+    }
+  }
+  

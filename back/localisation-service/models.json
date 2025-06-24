@@ -1,0 +1,15 @@
+{
+    "Region": {
+      "id": "string",
+      "name": "string"
+    },
+    "Village": {
+      "id": "string",
+      "region_id": "string",
+      "name": "string",
+      "latitude": "float",
+      "longitude": "float"
+    }
+  }
+
+  

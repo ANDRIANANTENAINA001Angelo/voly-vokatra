@@ -1,0 +1,15 @@
+{
+    "User": {
+      "id": "uuid",
+      "name": "string",
+      "email": "string",
+      "password_hash": "string",
+      "location_ids": ["string"],
+      "culture_ids": ["string"],
+      "created_at": "datetime",
+      "updated_at": "datetime"
+    }
+  }
+
+  
+  

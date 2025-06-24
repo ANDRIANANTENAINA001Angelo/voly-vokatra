@@ -1,0 +1,150 @@
+{
+    "auth_service": {
+      "base_url": "/auth",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/register",
+          "description": "Créer un nouvel utilisateur",
+          "body": ["name", "email", "password"],
+          "returns": "JWT token + user info"
+        },
+        {
+          "method": "POST",
+          "path": "/login",
+          "description": "Connexion utilisateur",
+          "body": ["email", "password"],
+          "returns": "JWT token"
+        },
+        {
+          "method": "POST",
+          "path": "/logout",
+          "description": "Déconnexion utilisateur",
+          "body": [],
+          "returns": "Success"
+        },
+        {
+          "method": "GET",
+          "path": "/me",
+          "description": "Infos du compte connecté",
+          "params": [],
+          "returns": "User profile"
+        },
+        {
+          "method": "PATCH",
+          "path": "/profile",
+          "description": "Mise à jour profil",
+          "body": ["name", "cultures[]", "location_ids[]"],
+          "returns": "Profil mis à jour"
+        }
+      ]
+    },
+    "localisation_service": {
+      "base_url": "/localisation",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/regions",
+          "description": "Liste des régions disponibles",
+          "returns": "Liste de régions"
+        },
+        {
+          "method": "GET",
+          "path": "/regions/:id/villages",
+          "description": "Villages d'une région",
+          "returns": "Liste de villages"
+        },
+        {
+          "method": "GET",
+          "path": "/villages/:id/coords",
+          "description": "Coordonnées GPS du village",
+          "returns": "lat, long"
+        },
+        {
+          "method": "POST",
+          "path": "/user-location",
+          "description": "Associer une localisation à un utilisateur",
+          "body": ["user_id", "location_id"],
+          "returns": "Association confirmée"
+        }
+      ]
+    },
+    "meteo_service": {
+      "base_url": "/meteo",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/forecast",
+          "description": "Prévisions météo localisées",
+          "query": ["date", "location_id"],
+          "returns": "Données météo"
+        },
+        {
+          "method": "GET",
+          "path": "/alerts",
+          "description": "Alertes météo par localisation",
+          "query": ["location_id"],
+          "returns": "Liste alertes"
+        }
+      ]
+    },
+    "culture_service": {
+      "base_url": "/culture",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/cultures",
+          "description": "Liste des types de cultures",
+          "returns": "Liste cultures"
+        },
+        {
+          "method": "GET",
+          "path": "/calendar",
+          "description": "Périodes optimales plantation/récolte",
+          "query": ["culture_id", "location_id"],
+          "returns": "Période agricole"
+        },
+        {
+          "method": "POST",
+          "path": "/user-cultures",
+          "description": "Associer culture à utilisateur",
+          "body": ["user_id", "culture_id"],
+          "returns": "Association confirmée"
+        }
+      ]
+    },
+    "notification_service": {
+      "base_url": "/notifications",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/",
+          "description": "Lister notifications utilisateur",
+          "query": ["user_id"],
+          "returns": "Liste notifications"
+        },
+        {
+          "method": "POST",
+          "path": "/notify",
+          "description": "Envoyer une notification",
+          "body": ["user_id", "message", "type"],
+          "returns": "Notification envoyée"
+        }
+      ]
+    },
+    "recommandation_service": {
+      "base_url": "/recommandation",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/generate",
+          "description": "Générer recommandation pour utilisateur",
+          "body": ["user_id", "culture_id", "location_id", "date"],
+          "returns": "Texte de recommandation"
+        }
+      ]
+    }
+  }
+
+  
+  

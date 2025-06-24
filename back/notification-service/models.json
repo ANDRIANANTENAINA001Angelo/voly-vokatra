@@ -1,0 +1,12 @@
+{
+    "Notification": {
+      "id": "string",
+      "user_id": "string",
+      "type": "string",
+      "message": "string",
+      "read": "boolean",
+      "sent_at": "datetime"
+    }
+  }
+
+  
