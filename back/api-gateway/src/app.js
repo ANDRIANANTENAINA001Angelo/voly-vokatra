@@ -9,7 +9,7 @@ const compression = require('compression');
 
 app.use(compression());
 // app.use(express.json());
-app.use(authMiddleware);
+// app.use(authMiddleware);
 app.use('/', proxyRoutes);
 
 app.listen(process.env.PORT, () => {

@@ -1,0 +1,179 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Culture Service - Madagascar",
+      "version": "1.0.0",
+      "description": "Service de gestion des cultures et des calendriers agricoles pour les régions de Madagascar."
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3002/cultures",
+        "description": "Développement local"
+      }
+    ],
+    "paths": {
+      "/": {
+        "get": {
+          "summary": "Liste des cultures",
+          "tags": ["Cultures"],
+          "responses": {
+            "200": {
+              "description": "Liste des cultures disponibles",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Culture"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Ajouter une culture",
+          "tags": ["Cultures"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Culture"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Culture ajoutée avec succès",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Culture"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/calendar": {
+        "post": {
+          "summary": "Ajouter un calendrier de culture",
+          "tags": ["Cultures"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CultureCalendar"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Calendrier ajouté avec succès",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CultureCalendar"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/calendar/{region_id}": {
+        "get": {
+          "summary": "Obtenir le calendrier d'une région",
+          "tags": ["Cultures"],
+          "parameters": [
+            {
+              "name": "region_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID de la région (ex: 'analamanga')"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Liste des calendriers pour la région",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/CultureCalendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Culture": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "Riz"
+            }
+          },
+          "required": ["name"]
+        },
+        "CultureCalendar": {
+          "type": "object",
+          "properties": {
+            "culture_id": {
+              "type": "string",
+              "example": "665e0fbf1d5372a3c3a1f913"
+            },
+            "region_id": {
+              "type": "string",
+              "example": "analamanga"
+            },
+            "plant_start": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-10-01"
+            },
+            "plant_end": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-12-01"
+            },
+            "harvest_start": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-03-01"
+            },
+            "harvest_end": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-05-01"
+            }
+          },
+          "required": [
+            "culture_id",
+            "region_id",
+            "plant_start",
+            "plant_end",
+            "harvest_start",
+            "harvest_end"
+          ]
+        }
+      }
+    }
+  }
+  

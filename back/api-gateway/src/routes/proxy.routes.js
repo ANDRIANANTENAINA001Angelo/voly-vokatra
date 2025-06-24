@@ -7,7 +7,7 @@ const createProxy = require('../services/proxyFactory');
 router.use('/auth', createProxy(config.auth));
 
 // Autres services (JWT requis)
-router.use('/culture', createProxy(config.culture));
+router.use('/cultures', createProxy(config.culture));
 router.use('/meteo', createProxy(config.meteo));
 router.use('/localisation', createProxy(config.localisation));
 router.use('/notifications', createProxy(config.notification));
