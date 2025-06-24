@@ -1,0 +1,102 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Météo Service",
+      "version": "1.0.0",
+      "description": "API de prévisions et alertes météo pour Madagascar"
+    },
+    "paths": {
+      "/meteo/forecast": {
+        "get": {
+          "summary": "Obtenir la prévision météo pour une date et localisation",
+          "tags":["Méteo"],
+          "parameters": [
+            {
+              "name": "date",
+              "in": "query",
+              "required": true,
+              "schema": { "type": "string", "format": "date" },
+              "description": "Date au format YYYY-MM-DD"
+            },
+            {
+              "name": "location_id",
+              "in": "query",
+              "required": true,
+              "schema": { "type": "string" },
+              "description": "ID de la localisation"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Données météo",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/Forecast" }
+                }
+              }
+            },
+            "400": { "description": "Paramètres manquants" },
+            "404": { "description": "Prévision non trouvée" }
+          }
+        }
+      },
+      "/meteo/alerts": {
+        "get": {
+          "summary": "Obtenir les alertes météo pour une localisation",
+          "tags":["Méteo"],
+          "parameters": [
+            {
+              "name": "location_id",
+              "in": "query",
+              "required": true,
+              "schema": { "type": "string" },
+              "description": "ID de la localisation"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Liste d'alertes météo en cours",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/Alert" }
+                  }
+                }
+              }
+            },
+            "400": { "description": "Paramètre manquant" }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Forecast": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "location_id": { "type": "string" },
+            "date": { "type": "string", "format": "date" },
+            "rain": { "type": "number", "description": "Précipitations (mm)" },
+            "temperature": { "type": "number", "description": "Température (°C)" },
+            "humidity": { "type": "number", "description": "Humidité (%)" },
+            "wind_speed": { "type": "number", "description": "Vitesse du vent (m/s)" },
+            "created_at": { "type": "string", "format": "date-time" }
+          }
+        },
+        "Alert": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "location_id": { "type": "string" },
+            "type": { "type": "string" },
+            "description": { "type": "string" },
+            "start_time": { "type": "string", "format": "date-time" },
+            "end_time": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    }
+  }
+  

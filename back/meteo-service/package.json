@@ -1,0 +1,16 @@
+{
+    "name": "meteo-service",
+    "version": "1.0.0",
+    "description": "Service météo pour Madagascar",
+    "main": "src/app.js",
+    "scripts": {
+      "start": "node src/app.js"
+    },
+    "dependencies": {
+      "dotenv": "^16.0.3",
+      "express": "^4.18.2",
+      "mongoose": "^5.13.23",
+      "swagger-ui-express": "^4.6.3"
+    }
+  }
+  

@@ -90,7 +90,65 @@ const seed = async () => {
   console.log("👤 Auth seed OK");
 
   await authConn.close();
+
+  // ===== METEO DB =====
+  const meteoConn = await mongoose.createConnection(process.env.MONGO_URI_METEO, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+
+  const Forecast = meteoConn.model('Forecast', require('../back/meteo-service/src/models/forecast.model').schema);
+  const Alert = meteoConn.model('Alert', require('../back/meteo-service/src/models/alert.model').schema);
+
+  await Forecast.deleteMany();
+  await Alert.deleteMany();
+
+  const locationId1 = village1._id.toString(); 
+  const locationId2 = village2._id.toString();
+
+  await Forecast.create([
+    {
+      location_id: locationId1,
+      date: new Date('2025-07-01'),
+      rain: 5,
+      temperature: 22.5,
+      humidity: 80,
+      wind_speed: 3.2
+    },
+    {
+      location_id: locationId2,
+      date: new Date('2025-07-02'),
+      rain: 0,
+      temperature: 24,
+      humidity: 70,
+      wind_speed: 4
+    }
+  ]);
+
+  await Alert.create([
+    {
+      location_id: locationId1,
+      type: 'Cyclone',
+      description: 'Cyclone en approche, vents violents attendus',
+      start_time: new Date('2025-06-01T10:00:00Z'),
+      end_time: new Date('2025-07-03T18:00:00Z')
+    },
+    {
+      location_id: locationId2,
+      type: 'Pluie forte',
+      description: 'Risques de fortes pluies localisées',
+      start_time: new Date('2025-06-02T06:00:00Z'),
+      end_time: new Date('2025-07-02T20:00:00Z')
+    }
+  ]);
+
+  console.log('🌦️ Meteo seed OK');
+  await meteoConn.close();
+
   console.log("✅ Seeding terminé avec succès !");
 };
 
-seed().catch(console.error);
+seed().catch(err => {
+  console.error('Erreur lors du seed:', err);
+  process.exit(1);
+});
