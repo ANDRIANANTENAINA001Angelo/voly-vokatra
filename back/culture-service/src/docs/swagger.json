@@ -5,14 +5,8 @@
       "version": "1.0.0",
       "description": "Service de gestion des cultures et des calendriers agricoles pour les régions de Madagascar."
     },
-    "servers": [
-      {
-        "url": "http://localhost:3002/cultures",
-        "description": "Développement local"
-      }
-    ],
     "paths": {
-      "/": {
+      "/cultures": {
         "get": {
           "summary": "Liste des cultures",
           "tags": ["Cultures"],
@@ -59,7 +53,7 @@
           }
         }
       },
-      "/calendar": {
+      "/cultures/calendar": {
         "post": {
           "summary": "Ajouter un calendrier de culture",
           "tags": ["Cultures"],
@@ -87,7 +81,7 @@
           }
         }
       },
-      "/calendar/{region_id}": {
+      "/cultures/calendar/{region_id}": {
         "get": {
           "summary": "Obtenir le calendrier d'une région",
           "tags": ["Cultures"],

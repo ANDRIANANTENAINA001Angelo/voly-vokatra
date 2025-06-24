@@ -7,7 +7,7 @@ const CultureCalendarSchema = new mongoose.Schema({
   plant_end: { type: Date, required: true },
   harvest_start: { type: Date, required: true },
   harvest_end: { type: Date, required: true }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('CultureCalendar', CultureCalendarSchema);
 

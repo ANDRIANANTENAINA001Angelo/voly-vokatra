@@ -1,0 +1,38 @@
+// localisation-service/src/controllers/localisation.controller.js
+const Region = require('../models/region.model');
+const Village = require('../models/village.model');
+
+exports.getRegions = async (req, res) => {
+  const regions = await Region.find();
+  res.json(regions);
+};
+
+exports.getVillagesByRegion = async (req, res) => {
+  const { id } = req.params;
+  const villages = await Village.find({ region_id: id });
+  res.json(villages);
+};
+
+exports.getVillageCoords = async (req, res) => {
+  const { id } = req.params;
+  const village = await Village.findById(id);
+  if (!village) return res.status(404).json({ error: 'Village non trouvé' });
+  res.json({ latitude: village.latitude, longitude: village.longitude });
+};
+
+exports.assignUserLocation = async (req, res) => {
+    const { user_id, location_id } = req.body;
+    if (!user_id || !location_id) return res.status(400).json({ error: 'Champs requis manquants' });
+  
+    const village = await Village.findById(location_id);
+    if (!village) return res.status(404).json({ error: 'Village non trouvé' });
+  
+    if (!village.users_ids.includes(user_id)) {
+      village.users_ids.push(user_id);
+      await village.save();
+    }
+  
+    res.status(200).json({ message: `Utilisateur ${user_id} associé au village ${village.name}` });
+  };
+
+  
