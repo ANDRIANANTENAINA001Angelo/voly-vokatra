@@ -7,7 +7,6 @@ const compression = require('compression');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./docs/swagger.json');
 const { Connection, Client } = require('@temporalio/client');
-const authMiddleware = require('./middlewares/auth.middleware');
 const proxyRoutes = require('./routes/proxy.routes');
 
 const PORT = process.env.PORT || 3000;
@@ -28,6 +27,8 @@ async function startServer() {
   app.post('/register', async (req, res) => {
     try {
       const { name, email, password, location_id, culture_ids } = req.body;
+      // console.log("culutre_ids in gateway: ",culture_ids);
+      
 
       const handle = await temporalClient.workflow.start('registerWorkflow', {
         args: [{ name, email, password, location_id, culture_ids }],

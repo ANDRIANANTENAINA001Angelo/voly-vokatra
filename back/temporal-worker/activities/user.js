@@ -1,6 +1,7 @@
 const axios = require('axios');
 const AUTH_URL = process.env.AUTH_SERVICE_URL;
 
+
 module.exports = {
   async registerUser(data) {
     const res = await axios.post(`${AUTH_URL}/auth/register`, data);
@@ -23,6 +24,11 @@ module.exports = {
     const res = await axios.patch(`${AUTH_URL}/auth/profile`, data, {
       headers: { Authorization: `Bearer ${token}` }
     });
+    return res.data;
+  },
+
+  async getAllUsers(){
+    const res = await axios.get(`${AUTH_URL}/auth/all-users`);
     return res.data;
   }
 };

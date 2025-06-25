@@ -1,4 +1,5 @@
 const Alert = require("../../meteo-service/src/models/alert.model");
+// const { sendAlert } = require("../../meteo-service/src/controllers/meteo.controller");
 
 exports.generateAlert = async (region_id, forecast) => {
   const alerts = [];
@@ -18,3 +19,8 @@ exports.generateAlert = async (region_id, forecast) => {
 exports.getAlertByRegion = async (region_id) => {
   return await Alert.find({ location_id: region_id });
 };
+
+
+exports.sendAlert = async ({location_id, type, description, start_time, end_time})=>{
+  return await Alert.create({location_id, type, description, start_time, end_time});
+}

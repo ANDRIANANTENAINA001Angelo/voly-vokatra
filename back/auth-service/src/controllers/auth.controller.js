@@ -38,7 +38,7 @@ exports.me = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  const { name, culture_ids, location_ids } = req.body;
+  const { name, culture_ids, location_ids} = req.body;
   const updated = await User.findByIdAndUpdate(
     req.user.id,
     { name, culture_ids, location_ids },
@@ -47,4 +47,8 @@ exports.updateProfile = async (req, res) => {
   res.json(updated);
 };
 
+exports.getAllUsers = async (req,res)=>{
+  const users = await User.find({});
+  res.status(200).json(users)
+}
 

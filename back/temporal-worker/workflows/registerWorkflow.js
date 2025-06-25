@@ -8,7 +8,7 @@ exports.registerWorkflow = async ({ name, email, password, location_id, culture_
   await activities.updateUserProfile(token, {
     name,
     location_ids: [location_id],
-    cultures: culture_ids
+    culture_ids: culture_ids
   });
 
   await activities.sendNotification(user.user._id, 'Bienvenue sur la plateforme agricole !', 'success');
