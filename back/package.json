@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "@temporalio/client": "^1.11.8",
+    "@temporalio/worker": "^1.11.8",
+    "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^16.5.0",
     "mongoose": "^5.13.23"

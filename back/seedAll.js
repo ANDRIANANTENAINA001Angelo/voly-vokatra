@@ -109,7 +109,7 @@ const seed = async () => {
   await Forecast.create([
     {
       location_id: locationId1,
-      date: new Date('2025-07-01'),
+      date: new Date('2025-06-24'),
       rain: 5,
       temperature: 22.5,
       humidity: 80,
@@ -117,7 +117,7 @@ const seed = async () => {
     },
     {
       location_id: locationId2,
-      date: new Date('2025-07-02'),
+      date: new Date('2025-06-25'),
       rain: 0,
       temperature: 24,
       humidity: 70,
@@ -190,7 +190,7 @@ const seed = async () => {
   await recoConn.close();
 
   
-  
+
   console.log("✅ Seeding terminé avec succès !");
 
 };

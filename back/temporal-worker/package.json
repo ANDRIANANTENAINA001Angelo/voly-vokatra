@@ -1,0 +1,29 @@
+{
+    "name": "temporal-worker",
+    "version": "1.0.0",
+    "description": "Temporal worker pour IDM (agriculture intelligente - Madagascar)",
+    "main": "worker.js",
+    "type": "commonjs",
+    "scripts": {
+      "start": "node worker.js"
+    },
+    "dependencies": {
+      "@temporalio/client": "^1.9.0",
+      "@temporalio/worker": "^1.9.0",
+      "axios": "^1.6.7",
+      "dotenv": "^16.3.1"
+    },
+    "devDependencies": {
+      "@temporalio/common": "^1.9.0"
+    },
+    "keywords": [
+      "temporal",
+      "worker",
+      "agriculture",
+      "madagascar",
+      "nodejs"
+    ],
+    "author": "TonNom",
+    "license": "MIT"
+  }
+  
