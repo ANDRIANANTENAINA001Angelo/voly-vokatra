@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ForecastSchema = new mongoose.Schema({
-  location_id: { type: String, required: true },
+  location_id: { type: String, required: true },//region id
   date: { type: Date, required: true },
   rain: { type: Number, required: true },            // mm
   temperature: { type: Number, required: true },     // °C

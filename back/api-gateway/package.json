@@ -17,11 +17,14 @@
     "author": "Assistant en développement",
     "license": "MIT",
     "dependencies": {
+        "@temporalio/client": "^1.9.0",
         "compression": "^1.8.0",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
         "http-proxy-middleware": "^2.0.6",
-        "jsonwebtoken": "^9.0.2"
+        "jsonwebtoken": "^9.0.2",
+        "node-cron": "^4.1.1",
+        "swagger-ui-express": "^5.0.1"
     },
     "devDependencies": {
         "nodemon": "^3.0.2"

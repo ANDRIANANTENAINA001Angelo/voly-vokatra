@@ -5,8 +5,7 @@ const Alert = require('../models/alert.model');
 exports.getForecast = async (req, res) => {
   const { date, location_id } = req.query;
 
-  console.log("get forecaste called in meteo service :",{ date, location_id });
-  
+  console.log("get forecaste called in meteo service:", { date, location_id });
 
   if (!date || !location_id) {
     return res.status(400).json({ message: 'Les paramètres date et location_id sont requis' });
@@ -17,18 +16,32 @@ exports.getForecast = async (req, res) => {
     const dayStart = new Date(inputDate.setHours(0, 0, 0, 0));
     const dayEnd = new Date(inputDate.setHours(23, 59, 59, 999));
 
-    const forecast = await Forecast.findOne({
+    let forecast = await Forecast.findOne({
       location_id,
       date: { $gte: dayStart, $lte: dayEnd }
     });
 
-    if (!forecast) return res.status(404).json({ message: 'Aucune prévision trouvée pour cette date et localisation' });
+    if (!forecast) {
+      // Création d'une prévision météo aléatoire
+      forecast = new Forecast({
+        location_id,
+        date: dayStart,
+        rain: Math.floor(Math.random() * 100),            // mm
+        temperature: Math.floor(Math.random() * 15) + 20,   // 20-35 °C
+        humidity: Math.floor(Math.random() * 50) + 40,      // 40-90 %
+        wind_speed: Math.floor(Math.random() * 10) + 1      // 1-10 m/s
+      });
+
+      await forecast.save();
+    }
 
     res.json(forecast);
   } catch (err) {
+    console.error("Erreur serveur dans getForecast:", err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
+
 
 // GET /alerts?location_id=xxx
 exports.getAlerts = async (req, res) => {

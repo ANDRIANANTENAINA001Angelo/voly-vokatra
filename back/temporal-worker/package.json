@@ -5,7 +5,7 @@
     "main": "worker.js",
     "type": "commonjs",
     "scripts": {
-      "start": "node worker.js"
+      "start": "node index.js"
     },
     "dependencies": {
       "@temporalio/client": "^1.9.0",

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const AlertSchema = new mongoose.Schema({
-  location_id: { type: String, required: true },
+  location_id: { type: String, required: true }, // region id
   type: { type: String, required: true },         // ex: "Cyclone", "Pluie forte"
   description: { type: String, required: true },
   start_time: { type: Date, required: true },

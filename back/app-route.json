@@ -141,10 +141,15 @@
           "description": "Générer recommandation pour utilisateur",
           "body": ["user_id", "culture_id", "location_id", "date"],
           "returns": "Texte de recommandation"
-        }
+        },
+        {
+            "method": "GET",
+            "path": "/user/:user_id",
+            "description": "avoir recommandation un user",
+            "returns": "liste recommandation"
+          }
       ]
     }
   }
 
-  
   

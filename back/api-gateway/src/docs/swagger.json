@@ -1,0 +1,91 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API Voly Vokatra",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/register": {
+        "post": {
+          "summary": "Déclenche le RegisterWorkflow",
+          "tags":["Auth"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "email": { "type": "string" },
+                    "password": { "type": "string" },
+                    "location_id": { "type": "string" },
+                    "culture_ids": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": ["name", "email", "password", "location_id", "culture_ids"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Token et user info" }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "summary": "Déclenche le LoginWorkflow",
+          "tags":["Auth"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string" },
+                    "password": { "type": "string" }
+                  },
+                  "required": ["email", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Token + user info" }
+          }
+        }
+      },
+      "/info": {
+        "get": {
+          "summary": "Déclenche le GetAllInfoWorkflow",
+          "tags":["User"],
+          "security": [{ "bearerAuth": [] }],
+          "responses": {
+            "200": { "description": "Toutes les infos liées à l'utilisateur" }
+          }
+        }
+      },
+      "/daily": {
+        "get": {
+          "summary": "Déclenche le DailyWorker (manuel)",
+          "tags":["CronJob"],
+          "responses": {
+            "200": { "description": "DailyWorker exécuté" }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer"
+        }
+      }
+    }
+  }
+  
