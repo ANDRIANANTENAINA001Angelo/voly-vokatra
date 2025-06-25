@@ -80,7 +80,7 @@ const seed = async () => {
   await User.deleteMany();
 
   const password_hash = await bcrypt.hash('password123', 10);
-  await User.create({
+  const user = await User.create({
     name: 'Andry Rabe',
     email: 'andry@example.mg',
     password_hash,
@@ -146,6 +146,28 @@ const seed = async () => {
   await meteoConn.close();
 
   console.log("✅ Seeding terminé avec succès !");
+
+  
+  // === notification ===
+  const notifConn = await mongoose.createConnection(process.env.MONGO_URI_NOTIFICATION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+  const Notification = notifConn.model('Notification', require('../back/notification-service/src/models/notification.model').schema);
+  await Notification.deleteMany();
+  
+  await Notification.create({
+    user_id: user._id,
+    type: 'Info',
+    message: "Bienvenue sur l'application météo agricole de Madagascar.",
+    read: false,
+    sent_at: new Date()
+  });
+  
+  console.log("📬 Notification seed OK");
+  await notifConn.close();
+  
+
 };
 
 seed().catch(err => {
