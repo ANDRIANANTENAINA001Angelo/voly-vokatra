@@ -145,7 +145,6 @@ const seed = async () => {
   console.log('🌦️ Meteo seed OK');
   await meteoConn.close();
 
-  console.log("✅ Seeding terminé avec succès !");
 
   
   // === notification ===
@@ -166,7 +165,33 @@ const seed = async () => {
   
   console.log("📬 Notification seed OK");
   await notifConn.close();
+
   
+  // ===== RECOMMANDATION DB =====
+
+  const recoConn = await mongoose.createConnection(process.env.MONGO_URI_RECOMMANDATION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+
+  const Recommandation = recoConn.model('Recommandation', require('../back/recommandation-service/src/models/recommandation.model').schema);
+  await Recommandation.deleteMany();
+
+  await Recommandation.create({
+    user_id: user._id,
+    location_id: village1._id.toString(),
+    culture_id: riz._id.toString(),
+    date: new Date('2025-07-01'),
+    message: '🌱 Plantez du Riz à Analamanga cette saison, les conditions sont favorables.'
+  });
+
+
+  console.log("📬 Recommandation seed OK");
+  await recoConn.close();
+
+  
+  
+  console.log("✅ Seeding terminé avec succès !");
 
 };
 

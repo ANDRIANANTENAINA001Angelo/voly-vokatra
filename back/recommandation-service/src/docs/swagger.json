@@ -1,0 +1,58 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Recommandation Service",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/recommandation/generate": {
+        "post": {
+          "summary": "Générer une recommandation",
+          "tags":["Recommandation"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": { "type": "string" },
+                    "location_id": { "type": "string" },
+                    "culture_id": { "type": "string" },
+                    "date": { "type": "string", "format": "date" }
+                  },
+                  "required": ["user_id", "location_id", "culture_id", "date"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Recommandation créée"
+            }
+          }
+        }
+      },
+      "/recommandation/user/{user_id}": {
+        "get": {
+          "summary": "Voir les recommandations d’un utilisateur",
+          "tags":["Recommandation"],
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Liste de recommandations"
+            }
+          }
+        }
+      }
+    }
+  }
+  
