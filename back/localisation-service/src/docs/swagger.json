@@ -25,6 +25,28 @@
           }
         }
       },
+      "/localisation/region-from-village/{village_id}": {
+        "get": {
+          "summary": "Get one région by village",
+          "tags": ["Localisation"],
+          "parameters": [
+            {
+              "name": "village_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID de la village"
+            }
+          ],
+          "responses": {
+            "200": {"description": "Région cible retourné"},
+            "404": {"description": "Région cible non trouvé"},
+            "500": {"description": "Erreur serveur"}
+          }
+        }
+      },
       "/localisation/regions/{id}/villages": {
         "get": {
           "summary": "Villages d'une région",

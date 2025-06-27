@@ -135,8 +135,8 @@ const seed = async () => {
     },
     {
       location_id: locationId2,
-      type: 'Pluie forte',
-      description: 'Risques de fortes pluies localisées',
+      type: 'Forte Pluie',
+      description: 'Risques de fortes pluies dans votre région',
       start_time: new Date('2025-06-02T06:00:00Z'),
       end_time: new Date('2025-07-02T20:00:00Z')
     }

@@ -5,7 +5,7 @@ const Alert = require('../models/alert.model');
 exports.getForecast = async (req, res) => {
   const { date, location_id } = req.query;
 
-  console.log("get forecaste called in meteo service:", { date, location_id });
+  // console.log("get forecaste called in meteo service:", { date, location_id });
 
   if (!date || !location_id) {
     return res.status(400).json({ message: 'Les paramètres date et location_id sont requis' });
@@ -65,14 +65,34 @@ exports.getAlerts = async (req, res) => {
 };
 
 
-exports.sendAlert = async (req, res)=>{
+exports.sendAlert = async (req, res) => {
   try {
-    const alert = await Alert.create(req.body);
-    res.status(200).json(alert)    
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({message:"Erreur serveur", error: error});    
-  }
+    // console.log("data receive in sendalert: ",req.body);
+    
+    const { location_id, type, description, start_time, end_time } = req.body;
 
-}
+    // Vérification de base
+    if (!location_id || !type || !description || !start_time || !end_time) {
+      return res.status(400).json({ message: "Champs requis manquants dans l'alerte" });
+    }
+
+    // Création de l'alerte
+    const alert = await Alert.create({
+      location_id,
+      type,
+      description,
+      start_time: new Date(start_time),
+      end_time: new Date(end_time)
+    });
+
+    res.status(201).json(alert);
+  } catch (error) {
+    console.error("❌ Erreur lors de l'envoi d'une alerte :", error);
+    res.status(500).json({
+      message: "Erreur serveur lors de la création de l'alerte",
+      error: error.message || error
+    });
+  }
+};
+
 

@@ -4,6 +4,7 @@ const router = express.Router();
 const ctrl = require('../controllers/localisation.controller');
 
 router.get('/regions', ctrl.getRegions);
+router.get('/region-from-village/:village_id', ctrl.getOneRegion);
 router.get('/regions/:id/villages', ctrl.getVillagesByRegion);
 router.get('/villages/:id/coords', ctrl.getVillageCoords);
 router.post('/user-location', ctrl.assignUserLocation);

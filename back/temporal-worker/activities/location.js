@@ -13,5 +13,11 @@ module.exports = {
   async getRegionByVillage(village_id) {
     const res = await axiosLocation.get(`${LOCATION_URL}/localisation/villages/${village_id}/coords`);
     return res.data;
+  },
+  
+  async getOneRegion(village_id) {
+    const res = await axiosLocation.get(`${LOCATION_URL}/localisation/region-from-village/${village_id}`);
+    return res.data;
   }
+
 };

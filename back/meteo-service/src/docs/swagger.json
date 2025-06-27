@@ -68,6 +68,34 @@
             "400": { "description": "Paramètre manquant" }
           }
         }
+      },"/meteo/send-alerts": {
+        "post": {
+          "summary": "Envoyé une alerte à un utilisateur",
+          "tags": ["Méteo"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "location_id": { "type": "string" },
+                    "type": { "type": "string"},
+                    "description": { "type": "string"},
+                    "start_time":{ "type": "string", "format": "date", "example": "2025-06-27"},
+                    "end_time":{ "type": "string", "format": "date", "example": "2025-06-27"}
+                  },
+                  "required": ["localisation_id","type","description","start_time","end_time"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Alert Envoyé" },
+            "400": { "description": "Requête invalide" },
+            "500": { "description": "Erreur serveur" }
+          }
+        }
       }
     },
     "components": {

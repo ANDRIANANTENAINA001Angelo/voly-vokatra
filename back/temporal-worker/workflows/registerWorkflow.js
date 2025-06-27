@@ -5,12 +5,15 @@ exports.registerWorkflow = async ({ name, email, password, location_id, culture_
   const user = await activities.registerUser({ name, email, password });
   const token = user.token;
 
-  await activities.updateUserProfile(token, {
+  const userUpdated = await activities.updateUserProfile(token, {
     name,
     location_ids: [location_id],
     culture_ids: culture_ids
   });
 
   await activities.sendNotification(user.user._id, 'Bienvenue sur la plateforme agricole !', 'success');
-  return user;
+  return {
+    user: userUpdated,
+    token: token 
+  };
 };

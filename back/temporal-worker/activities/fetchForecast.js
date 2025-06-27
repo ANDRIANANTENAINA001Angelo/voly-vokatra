@@ -2,7 +2,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 exports.fetchForecast = async ({ location_id, date }) => {
-  console.log("fetch forecast called : ",{ location_id, date });
+  // console.log("fetch forecast called : ",{ location_id, date });
   
   try {
     const response = await axios.get('http://localhost:8000/meteo/forecast', {

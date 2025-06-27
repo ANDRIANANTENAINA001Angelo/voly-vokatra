@@ -52,6 +52,28 @@
             }
           }
         }
+      },      
+      "/cultures/get-one/{culture_id}": {
+        "get": {
+          "summary": "Get One culture",
+          "tags": ["Cultures"],
+          "parameters": [
+            {
+              "name": "culture_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID de la culture"
+            }
+          ],
+          "responses": {
+            "200": {"description": "Culture cible retourné"},
+            "400":{"description": "Culture introuvable"},
+            "500":{ "description": "Erreur serveur"}
+          }
+        }
       },
       "/cultures/calendar": {
         "post": {

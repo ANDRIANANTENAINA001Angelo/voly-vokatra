@@ -13,6 +13,29 @@ exports.getVillagesByRegion = async (req, res) => {
   res.json(villages);
 };
 
+
+exports.getOneRegion = async (req, res) => {
+  try {
+    
+    const { village_id } = req.params; // ici, c’est bien un village_id
+    const village = await Village.findById(village_id);
+    if (!village) {
+      return res.status(404).json({ error: 'Village non trouvé' });
+    }
+    
+    const region = await Region.findById(village.region_id);
+    if (!region) {
+      return res.status(404).json({ error: 'Région associée non trouvée' });
+    }
+
+    res.status(200).json(region);
+  } catch (error) {
+    console.error("Erreur getOneRegion:", error);
+    res.status(500).json({ message: "Erreur serveur", error });
+  }
+};
+
+
 exports.getVillageCoords = async (req, res) => {
   const { id } = req.params;
   const village = await Village.findById(id);

@@ -1,26 +1,34 @@
-const Alert = require("../../meteo-service/src/models/alert.model");
-// const { sendAlert } = require("../../meteo-service/src/controllers/meteo.controller");
+const axios = require('axios');
+const METEO_URL = process.env.METEO_SERVICE_URL;
 
-exports.generateAlert = async (region_id, forecast) => {
-  const alerts = [];
-  if (forecast.rain > 15) {
-    alerts.push({
-      location_id: region_id,
-      type: 'Pluie forte',
-      description: 'Risque d’inondation',
-      start_time: forecast.date,
-      end_time: new Date(forecast.date.getTime() + 2 * 3600 * 1000),
+
+module.exports = {
+  async fetchForecast(location_id, date) {
+    const isoDate = date.toISOString().split('T')[0];
+    const res = await axios.get(`${METEO_URL}/meteo/forecast`, {
+      params: { location_id, date: isoDate }
     });
+    return res.data;
+  },
+
+
+  async getAlerts(location_id) {
+    const res = await axios.get(`${METEO_URL}/meteo/alerts`, {
+      params: { location_id }
+    });
+    return res.data;
+  },
+
+
+  async sendAlert({ location_id, type, description, start_time, end_time }) {
+    const res = await axios.post(`${METEO_URL}/meteo/send-alerts`, {
+      location_id,
+      type,
+      description,
+      start_time,
+      end_time
+    });
+    return res.data;
   }
-  // Ajouter d'autres logiques ici si besoin
-  return await Alert.insertMany(alerts);
+
 };
-
-exports.getAlertByRegion = async (region_id) => {
-  return await Alert.find({ location_id: region_id });
-};
-
-
-exports.sendAlert = async ({location_id, type, description, start_time, end_time})=>{
-  return await Alert.create({location_id, type, description, start_time, end_time});
-}

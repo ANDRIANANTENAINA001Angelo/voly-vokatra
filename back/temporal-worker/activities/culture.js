@@ -7,3 +7,10 @@ exports.getCultureCalendar = async (cultureId, regionId) => {
   return res.data;
 };
 
+
+exports.getOneCulture = async (cultureId) => {
+  const res = await axiosCulture.get(`${process.env.CULTURE_SERVICE_URL}/cultures/get-one/${cultureId}`);
+  return res.data;
+};
+
+
