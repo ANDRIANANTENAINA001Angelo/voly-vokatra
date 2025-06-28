@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-      "title": "Météo Service",
+      "title": "Météo Service - Madagascar",
       "version": "1.0.0",
       "description": "API de prévisions et alertes météo pour Madagascar"
     },

@@ -8,6 +8,7 @@
       "/notifications": {
         "get": {
           "summary": "Lister les notifications d'un utilisateur",
+          "tags":["Notification"],
           "parameters": [
             {
               "in": "query",
@@ -26,6 +27,7 @@
       "/notifications/notify": {
         "post": {
           "summary": "Envoyer une notification",
+          "tags":["Notification"],
           "requestBody": {
             "content": {
               "application/json": {
