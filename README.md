@@ -131,6 +131,6 @@ voly-vokatra/
 
 ## 💻 Technologies & Stack
 
-Node.js / Express.js/ Vue.js / MongoDB 
-PWA / Temporal.io  
+- Node.js / Express.js/ Vue.js / MongoDB 
+- PWA / Temporal.io  
 
