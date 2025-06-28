@@ -2,10 +2,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AuthPage from "../pages/AuthPage.vue";
 import Dashboard from "../pages/Dashboard.vue";
+import Profil from "../pages/Profil.vue";
 
 const routes = [
   { path: '/', name: 'auth', component: AuthPage },           
-  { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } } 
+  { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } }, 
+  { path: '/profil', name: 'profil', component: Profil, meta: { requiresAuth: true } }, 
 ];
 
 const router = createRouter({
