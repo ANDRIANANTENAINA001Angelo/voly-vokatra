@@ -35,6 +35,16 @@ exports.getOneRegion = async (req, res) => {
   }
 };
 
+exports.getAllVillage = async (req, res) => {
+  const villages = await Village.find().populate('region_id', 'name');
+  res.json(villages);
+}
+
+exports.getOneVillage = async (req, res) => {
+  const { village_id } = req.params;
+  const village = await Village.findById(village_id).populate('region_id', 'name');
+  res.json(village);
+}
 
 exports.getVillageCoords = async (req, res) => {
   const { id } = req.params;

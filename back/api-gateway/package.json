@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node src/app.js",
         "dev": "nodemon src/app.js",
-        "cron":"node src/cron-daily.js"
+        "cron": "node src/cron-daily.js"
     },
     "keywords": [
         "gateway",
@@ -20,6 +20,7 @@
     "dependencies": {
         "@temporalio/client": "^1.9.0",
         "compression": "^1.8.0",
+        "cors": "^2.8.5",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
         "http-proxy-middleware": "^2.0.6",

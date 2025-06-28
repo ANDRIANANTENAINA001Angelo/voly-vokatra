@@ -18,6 +18,11 @@ module.exports = {
   async getOneRegion(village_id) {
     const res = await axiosLocation.get(`${LOCATION_URL}/localisation/region-from-village/${village_id}`);
     return res.data;
+  },
+  
+  async getOneVillage(village_id){
+    const res = await axiosLocation.get(`${LOCATION_URL}/localisation/village-get-one/${village_id}`);
+    return res.data;
   }
 
 };

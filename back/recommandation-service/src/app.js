@@ -4,11 +4,14 @@ const connectDB = require('./config/db');
 const recommandationRoutes = require('./routes/recommandation.routes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDoc = require('./docs/swagger.json');
+const cors = require('cors');
+
 
 dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors())
 app.use(express.json());
 
 app.use('/recommandation', recommandationRoutes);

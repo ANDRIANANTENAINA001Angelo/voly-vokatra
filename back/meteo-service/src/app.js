@@ -4,11 +4,13 @@ const connectDB = require('./config/db');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDoc = require('./docs/swagger.json');
 const meteoRoutes = require('./routes/meteo.routes');
+const cors = require('cors');
 
 
 const app = express();
 const port = process.env.PORT || 3003;
 
+app.use(cors());
 app.use(express.json());
 
 connectDB();

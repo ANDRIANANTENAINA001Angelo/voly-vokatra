@@ -1,4 +1,3 @@
-// src/app.js
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -8,11 +7,13 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./docs/swagger.json');
 const { Connection, Client } = require('@temporalio/client');
 const proxyRoutes = require('./routes/proxy.routes');
+const cors = require('cors');
 
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   const app = express();
+  app.use(cors());
   app.use(compression());
   app.use(express.json());
 

@@ -4,11 +4,13 @@ const routes = require('./routes/notification.routes');
 const connectDB = require("./config/db")
 const swaggerUi = require('swagger-ui-express');
 const swaggerDoc = require('./docs/swagger.json');
+const cors = require('cors');
 
 
 const app = express();
 const PORT = process.env.PORT || 3005
 
+app.use(cors());
 app.use(express.json());
 
 connectDB();

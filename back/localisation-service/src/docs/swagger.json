@@ -106,6 +106,36 @@
             }
           }
         }
+      },      
+      "/localisation/villages": {
+        "get": {
+          "summary": "Get All village",
+          "tags": ["Localisation"],
+          "responses": {
+            "200": {"description": "Liste village"},
+            "404": {"description": "Village non trouvé"},
+            "500": {"description": "Erreur serveur"}
+          }
+        }
+      },      
+      "/localisation/village-get-one/{village_id}": {
+        "get": {
+          "summary": "Get One village",
+          "tags": ["Localisation"],
+          "parameters": [
+            {
+              "name": "village_id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" }
+            }
+          ],
+          "responses": {
+            "200": {"description": "Le village avec region"},
+            "404": {"description": "Village non trouvé"},
+            "500": {"description": "Erreur serveur"}
+          }
+        }
       },
       "/localisation/user-location": {
         "post": {

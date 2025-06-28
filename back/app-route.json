@@ -50,6 +50,12 @@
         },
         {
           "method": "GET",
+          "path": "/regions-fron-village/:village_id",
+          "description": "Get région par village",
+          "returns": "Region"
+        },
+        {
+          "method": "GET",
           "path": "/regions/:id/villages",
           "description": "Villages d'une région",
           "returns": "Liste de villages"
@@ -85,6 +91,13 @@
           "description": "Alertes météo par localisation",
           "query": ["location_id"],
           "returns": "Liste alertes"
+        },
+        {
+          "method": "POST",
+          "path": "/send-alerts",
+          "description": "Envoyé Alertes météo à un utilisateur",
+          "body": ["location_id", "type","description","start_time","end_time"],
+          "returns": "Liste alertes"
         }
       ]
     },
@@ -99,16 +112,29 @@
         },
         {
           "method": "GET",
+          "path": "/get-one/{culture_id}",
+          "description": "get one culture by id",
+          "returns": "Le cuture"
+        },
+        {
+          "method": "GET",
           "path": "/calendar",
           "description": "Périodes optimales plantation/récolte",
           "query": ["culture_id", "location_id"],
           "returns": "Période agricole"
         },
         {
+          "method": "GET",
+          "path": "/calendar/{region_id}",
+          "description": "Périodes optimales plantation/récolte par région_id",
+          "param": ["region_id"],
+          "returns": "Période agricole"
+        },
+        {
           "method": "POST",
-          "path": "/user-cultures",
-          "description": "Associer culture à utilisateur",
-          "body": ["user_id", "culture_id"],
+          "path": "/calendar",
+          "description": "Ajouter calendier culture",
+          "body": ["culture_id","region_id","plant_start","plant_end","harvest_start","harvest_end"],
           "returns": "Association confirmée"
         }
       ]
