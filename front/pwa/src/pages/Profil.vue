@@ -1,48 +1,119 @@
 <template>
   <div class="profile-container">
-    <div v-if="!isOnline" class="offline-alert">
-    ⚠️ Vous êtes hors ligne. Certaines données peuvent ne pas être à jour.
+    <div class="profile-card">
+      <div class="profile-header">
+        <h2 class="profile-title">
+          <span class="profile-icon">👤</span>
+          Mon Profil
+        </h2>
+        <p class="profile-subtitle">Gérez vos informations personnelles et préférences</p>
+      </div>
+
+      <div v-if="!isOnline" class="offline-alert">
+        <span class="alert-icon">⚠️</span>
+        <span>Vous êtes hors ligne. Certaines données peuvent ne pas être à jour.</span>
+      </div>
+
+      <div v-if="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>⏳ Chargement du profil...</p>
+      </div>
+
+      <form v-else @submit.prevent="updateProfile" class="profile-form">
+        <div class="form-section">
+          <h3 class="section-title">
+            <span class="section-icon">ℹ️</span>
+            Informations personnelles
+          </h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">
+                <span class="label-icon">👤</span>
+                Nom complet
+              </label>
+              <input 
+                type="text" 
+                v-model="form.name" 
+                class="form-input"
+                placeholder="Entrez votre nom complet"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <span class="label-icon">📧</span>
+                Adresse email
+              </label>
+              <input 
+                type="email" 
+                v-model="form.email" 
+                disabled 
+                class="form-input disabled"
+                title="L'email ne peut pas être modifié"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <span class="section-icon">🌍</span>
+            Localisation et cultures
+          </h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">
+                <span class="label-icon">🏡</span>
+                Village
+              </label>
+              <select v-model="form.location_ids" required class="form-select">
+                <option disabled value="">Choisir un village</option>
+                <option v-for="v in villages" :key="v._id" :value="v._id">
+                  {{ v.name }} ({{ v.region_id?.name || 'Région inconnue' }})
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">
+                <span class="label-icon">🌱</span>
+                Cultures pratiquées
+              </label>
+              <select v-model="form.culture_ids" multiple required class="form-select multiple">
+                <option v-for="c in cultures" :key="c._id" :value="c._id">
+                  {{ c.name }}
+                </option>
+              </select>
+              <small class="form-hint">
+                <span class="hint-icon">💡</span>
+                Maintenez Ctrl/Cmd pour sélectionner plusieurs cultures
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            :disabled="submitting || !isOnline" 
+            class="submit-btn"
+            :class="{ submitting: submitting }"
+          >
+            <span class="btn-icon">{{ submitting ? '⏳' : '💾' }}</span>
+            {{ submitting ? 'Enregistrement...' : 'Enregistrer les modifications' }}
+          </button>
+        </div>
+
+        <div v-if="message" class="message-container">
+          <div class="message" :class="{ success: success, error: error }">
+            <span class="message-icon">{{ success ? '✅' : '❌' }}</span>
+            {{ message }}
+          </div>
+        </div>
+      </form>
     </div>
-    <h2>👤 Mon Profil</h2>
-
-
-    <div v-if="loading">⏳ Chargement du profil...</div>
-    <form v-else @submit.prevent="updateProfile">
-      <div class="form-group">
-        <label>Nom</label>
-        <input type="text" v-model="form.name" />
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" v-model="form.email" disabled />
-      </div>
-
-      <div class="form-group">
-        <label>🏡 Village</label>
-        <select v-model="form.location_ids" required>
-          <option disabled value="">Choisir un village</option>
-          <option v-for="v in villages" :key="v._id" :value="v._id">
-            {{ v.name }} ({{ v.region_id?.name || 'Région inconnue' }})
-          </option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>🌱 Cultures</label>
-        <select v-model="form.culture_ids" multiple required>
-          <option v-for="c in cultures" :key="c._id" :value="c._id">
-            {{ c.name }}
-          </option>
-        </select>
-      </div>
-
-      <button type="submit" :disabled="submitting || !isOnline">💾 Enregistrer</button>
-
-      <p class="message" :class="{ success: success, error: error }" v-if="message">
-        {{ message }}
-      </p>
-    </form>
   </div>
 </template>
 
@@ -158,68 +229,293 @@ async mounted() {
 
 <style scoped>
 .profile-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  background: white;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-  font-family: 'Segoe UI', sans-serif;
 }
 
-h2 {
+.profile-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-green), var(--secondary-green), var(--light-green));
+}
+
+.profile-header {
+  background: linear-gradient(135deg, var(--light-gray), #f8f9fa);
+  padding: 2rem;
   text-align: center;
-  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--medium-gray);
+}
+
+.profile-title {
+  color: var(--primary-green);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.profile-icon {
+  font-size: 2.5rem;
+}
+
+.profile-subtitle {
+  color: var(--dark-gray);
+  font-size: 1rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.offline-alert {
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  color: #856404;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--warning-orange);
+  font-weight: 500;
+}
+
+.alert-icon {
+  font-size: 1.2rem;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--light-gray);
+  border-top: 3px solid var(--secondary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.profile-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-title {
+  color: var(--primary-green);
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--light-green);
+}
+
+.section-icon {
+  font-size: 1.4rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-label {
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-label {
   font-weight: 600;
-  display: block;
-  margin-bottom: 0.3rem;
+  color: var(--primary-green);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
 }
 
-input,
-select {
-  width: 100%;
-  padding: 0.6rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.label-icon {
+  font-size: 1.1rem;
+}
+
+.form-input,
+.form-select {
+  padding: 1rem;
+  border: 2px solid var(--medium-gray);
+  border-radius: 8px;
   font-size: 1rem;
+  transition: var(--transition);
+  background: white;
 }
 
-button {
-  background-color: #3182ce;
-  color: white;
-  padding: 0.7rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--secondary-green);
+  box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
 }
 
-button:hover {
-  background-color: #2c5282;
-}
-
-button:disabled {
-  background-color: #a0aec0;
+.form-input.disabled {
+  background: var(--light-gray);
+  color: var(--dark-gray);
   cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-select.multiple {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-hint {
+  color: var(--dark-gray);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  opacity: 0.8;
+}
+
+.hint-icon {
+  font-size: 0.9rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--medium-gray);
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 250px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submit-btn.submitting {
+  background: var(--dark-gray);
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+.message-container {
+  display: flex;
+  justify-content: center;
 }
 
 .message {
-  margin-top: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 400px;
   text-align: center;
 }
 
-.success {
-  color: green;
+.message.success {
+  background: #d4edda;
+  color: var(--success-green);
+  border: 1px solid #c3e6cb;
 }
 
-.error {
-  color: red;
+.message.error {
+  background: #f8d7da;
+  color: var(--error-red);
+  border: 1px solid #f5c6cb;
+}
+
+.message-icon {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 1rem;
+  }
+  
+  .profile-header {
+    padding: 1.5rem;
+  }
+  
+  .profile-title {
+    font-size: 1.6rem;
+  }
+  
+  .profile-form {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .submit-btn {
+    min-width: auto;
+    width: 100%;
+  }
 }
 </style>
