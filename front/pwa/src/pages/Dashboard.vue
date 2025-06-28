@@ -2,12 +2,14 @@
   <div class="dashboard-container">
     <header>
       <h1>Bienvenue {{ user.name || 'Utilisateur' }} 🌾</h1>
+    <button v-if="isOnline" @click="refreshDashboard">🔄 Actualiser</button>
       <router-link to="/profil"><button>👤 Mon profil</button></router-link>
       <button @click="logout">Se déconnecter</button>
     </header>
     <div v-if="!isOnline" class="offline-alert">
     ⚠️ Vous êtes hors ligne. Certaines données peuvent ne pas être à jour.
     </div>
+
 
 
 
@@ -43,7 +45,7 @@
       <section class="forecast-section">
         <h3>🌤️ Prévisions météo</h3>
         <label>📅 Choisir une date :</label>
-        <input type="date" v-model="selectedDate" @change="fetchForecastByDate" />
+        <input type="date" v-model="selectedDate" @change="fetchForecastByDate" :disabled="!isOnline"/>
         <div class="forecast-nav">
           <button v-for="(item, index) in forecastHistory" :key="index" @click="currentForecast = item" :class="{ active: currentForecast.date === item.date }">
             {{ formatDate(item.date) }}
@@ -241,6 +243,39 @@ export default {
         month: 'long',
         day: 'numeric'
       });
+    },
+    async refreshDashboard() {
+        this.loading = true;
+        // localStorage.removeItem('forecastHistory');
+
+        // ⚠️ IndexedDB est asynchrone, on doit bien le vider aussi
+        try {
+            const db = await openDB('agri-db', 1);
+            await db.clear('userinfo');
+        } catch (e) {
+            console.warn('Impossible de vider IndexedDB :', e);
+        }
+
+        await this.loadDashboardData(true);
+        this.loading = false;
+    },
+    async loadDashboardData(isRefresh=false) {
+        if(isRefresh){
+            await this.fetchAndCacheAll();
+        }
+        else{
+            
+            await this.loadFromCache();
+    
+            if (this.isOnline && (!this.userInfo || !this.userInfo.village || !this.userInfo.cultures?.length)) {
+                await this.fetchAndCacheAll();
+            }
+    
+            const today = new Date().toISOString().slice(0, 10);
+            if (!this.forecastHistory.find(f => f.date === today)) {
+                await this.fetchForecast(today);
+            }
+        }
     }
   }
 };

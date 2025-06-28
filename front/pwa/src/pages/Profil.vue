@@ -1,6 +1,10 @@
 <template>
   <div class="profile-container">
+    <div v-if="!isOnline" class="offline-alert">
+    ⚠️ Vous êtes hors ligne. Certaines données peuvent ne pas être à jour.
+    </div>
     <h2>👤 Mon Profil</h2>
+
 
     <div v-if="loading">⏳ Chargement du profil...</div>
     <form v-else @submit.prevent="updateProfile">
@@ -33,7 +37,7 @@
         </select>
       </div>
 
-      <button type="submit" :disabled="submitting">💾 Enregistrer</button>
+      <button type="submit" :disabled="submitting || !isOnline">💾 Enregistrer</button>
 
       <p class="message" :class="{ success: success, error: error }" v-if="message">
         {{ message }}
@@ -61,10 +65,17 @@ export default {
       success: false,
       error: false,
       loading: true,
-      submitting: false
+      submitting: false,
+      isOnline: navigator.onLine,
+
     };
   },
-  async mounted() {
+async mounted() {
+    // 🔌 Gestion en ligne / hors ligne
+    window.addEventListener('online', () => { this.isOnline = true });
+    window.addEventListener('offline', () => { this.isOnline = false });
+  
+  if (this.isOnline) {
     try {
       const [me, v, c] = await Promise.all([
         axios.get('/auth/me'),
@@ -82,12 +93,43 @@ export default {
       this.villages = v.data;
       this.cultures = c.data;
     } catch (err) {
+      console.error(err);
       this.message = "❌ Erreur de chargement du profil.";
       this.error = true;
     } finally {
       this.loading = false;
     }
-  },
+  } else {
+    // 📴 Mode offline : charger depuis IndexedDB
+    try {
+      const { openDB } = await import('idb');
+      const db = await openDB('agri-db', 1);
+      const info = await db.get('userinfo', 'data');
+
+      if (info) {
+        this.form = {
+          name: info.user_info.name,
+          email: info.user_info.email,
+          location_ids: info.user_info.location_ids?.[0] || '',
+          culture_ids: info.user_info.culture_ids || []
+        };
+        this.villages = info.villages || [];
+        this.cultures = info.cultures || [];
+        this.message = '🕸️ Chargé depuis le cache local (hors ligne)';
+        this.success = true;
+      } else {
+        this.message = "📭 Données indisponibles hors ligne.";
+        this.error = true;
+      }
+    } catch (e) {
+      console.error('❌ Erreur lecture cache', e);
+      this.message = "📭 Échec récupération locale";
+      this.error = true;
+    } finally {
+      this.loading = false;
+    }
+  }
+},
   methods: {
     async updateProfile() {
       this.submitting = true;

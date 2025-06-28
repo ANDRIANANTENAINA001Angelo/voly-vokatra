@@ -59,6 +59,15 @@ export default defineConfig({
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 7 jours
               }
             }
+          },
+          {
+            urlPattern: ({ request }) => request.destination === 'document',
+            handler: 'NetworkFirst'
+          },
+          {
+            urlPattern: ({ request }) =>
+              ['style', 'script', 'image', 'font'].includes(request.destination),
+            handler: 'CacheFirst'
           }
         ]
       }
